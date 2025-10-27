@@ -4,3 +4,5 @@ __pycache__/
 .idea/
 cassandra/data/
 minio/data/
+
+spark/jars/*.jar
