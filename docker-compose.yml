@@ -37,13 +37,20 @@ services:
     build: ./spark
     container_name: spark-consumer
     depends_on:
-      - kafka
-      - minio
+      cassandra:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      minio:
+        condition: service_started
     environment:
       - SPARK_MODE=client
       - PYTHONUNBUFFERED=1
+    restart: always
     volumes:
       - ./spark/output:/output
+
+
 
   minio:
     image: minio/minio:latest
@@ -58,6 +65,27 @@ services:
     volumes:
       - ./minio/data:/data
 
+
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    ports:
+      - "9042:9042"        # CQL port
+    environment:
+      - CASSANDRA_CLUSTER_NAME=weather-cluster
+      - CASSANDRA_NUM_TOKENS=8
+      - CASSANDRA_START_RPC=true
+      - CASSANDRA_RPC_ADDRESS=0.0.0.0
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  cassandra_data: 
 
 
 

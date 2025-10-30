@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import from_json, col
-from pyspark.sql.types import StructType, StringType, DoubleType
+from pyspark.sql.types import StructType, StringType, DoubleType, TimestampType
+from pyspark.sql.functions import from_json, col, to_timestamp
 
 # 1. Create SparkSession
 spark = (SparkSession.builder
@@ -11,6 +11,7 @@ spark = (SparkSession.builder
     .config("spark.hadoop.fs.s3a.access.key", "minioadmin")
     .config("spark.hadoop.fs.s3a.secret.key", "minioadmin")
     .config("spark.hadoop.fs.s3a.path.style.access", "true")
+    .config("spark.databricks.delta.schema.autoMerge.enabled", "true")
     .getOrCreate())
 
 # 2. Read from Kafka, used spark
@@ -19,6 +20,7 @@ kafka_df = (spark.readStream
     .option("kafka.bootstrap.servers", "kafka:9092")
     .option("subscribe", "weather_stream")
     .option("startingOffsets", "latest")
+    .option("failOnDataLoss", "false")
     .load())
 
 # 3. Define schema for JSON in Kafka 'value'
@@ -37,13 +39,30 @@ parsed_df = (kafka_df
 output_path = "s3a://weather-data/delta/weather"
 checkpoint_path = "s3a://weather-data/delta/_checkpoints/weather"
 
-query = (
+# Convert timestamp string to proper timestamp type
+parsed_df = parsed_df.withColumn("timestamp", to_timestamp("timestamp"))
+
+# 5a. Write to Delta Lake (MinIO)
+delta_query = (
     parsed_df.writeStream
         .format("delta")
         .option("path", output_path)
         .option("checkpointLocation", checkpoint_path)
+        .option("mergeSchema", "true") \
         .outputMode("append")
         .start()
 )
 
-query.awaitTermination()
+# 5b. Write to Cassandra
+cassandra_query = (
+    parsed_df.writeStream
+        .format("org.apache.spark.sql.cassandra")
+        .option("keyspace", "weather")
+        .option("table", "readings")
+        .option("checkpointLocation", "/tmp/checkpoints_cassandra")
+        .outputMode("append")
+        .start()
+)
+
+# 6. Keep both running
+spark.streams.awaitAnyTermination()
