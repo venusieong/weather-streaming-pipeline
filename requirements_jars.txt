@@ -1,0 +1,20 @@
+# Weather Streaming Pipeline - Spark Dependencies
+# Spark version: 3.5.1 | Scala: 2.12
+# This list captures the exact JARs used in the working Docker setup.
+
+# ────────── Delta Lake + AWS/MinIO Support ──────────
+delta-spark_2.12-3.2.0.jar
+delta-storage-3.2.0.jar
+hadoop-aws-3.3.4.jar
+aws-java-sdk-bundle-1.12.772.jar
+
+# ────────── Cassandra Integration ──────────
+spark-cassandra-connector_2.12-3.5.0.jar
+spark-cassandra-connector-assembly_2.12-3.5.0.jar
+java-driver-core-4.15.0.jar
+java-driver-core-shaded-4.15.0.jar
+java-driver-mapper-runtime-4.15.0.jar
+java-driver-query-builder-4.15.0.jar
+java-driver-shaded-guava-25.1-jre.jar
+java-driver-shaded-netty-4.15.0.jar
+config-1.4.2.jar
