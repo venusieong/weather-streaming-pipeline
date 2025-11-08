@@ -1,0 +1,262 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "hadesarchitect-cassandra-datasource",
+          "uid": "PE3297E400DFF12FE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 40,
+            "min": -10,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 20
+                },
+                {
+                  "color": "red",
+                  "value": 30
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^temperature$/",
+            "values": true
+          },
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.2.1",
+        "targets": [
+          {
+            "alias": "",
+            "datasource": {
+              "type": "hadesarchitect-cassandra-datasource",
+              "uid": "PE3297E400DFF12FE"
+            },
+            "datasourceId": 1,
+            "hide": false,
+            "queryType": "query",
+            "rawQuery": true,
+            "refId": "A",
+            "target": "SELECT city, temperature_c as Temperature, wind_speed_ms as  WindSpeed, timestamp\nFROM weather.readings\nwhere city='New York'\nOrder by timestamp desc\nlimit 1\nALLOW FILTERING;"
+          }
+        ],
+        "title": "New York Temperature",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "hadesarchitect-cassandra-datasource",
+          "uid": "PE3297E400DFF12FE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 40,
+            "min": -10,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 20
+                },
+                {
+                  "color": "red",
+                  "value": 30
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 4,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^temperature$/",
+            "values": true
+          },
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.2.1",
+        "targets": [
+          {
+            "alias": "",
+            "datasource": {
+              "type": "hadesarchitect-cassandra-datasource",
+              "uid": "PE3297E400DFF12FE"
+            },
+            "datasourceId": 1,
+            "hide": false,
+            "queryType": "query",
+            "rawQuery": true,
+            "refId": "A",
+            "target": "SELECT city, temperature_c as Temperature, wind_speed_ms as  WindSpeed, timestamp\nFROM weather.readings\nwhere city='Tokyo'\nOrder by timestamp desc\nlimit 1\nALLOW FILTERING;"
+          }
+        ],
+        "title": "Tokyo Temperature",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "hadesarchitect-cassandra-datasource",
+          "uid": "PE3297E400DFF12FE"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 40,
+            "min": -10,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": 0
+                },
+                {
+                  "color": "#EAB839",
+                  "value": 20
+                },
+                {
+                  "color": "red",
+                  "value": 30
+                }
+              ]
+            },
+            "unit": "celsius"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 16
+        },
+        "id": 5,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^temperature$/",
+            "values": true
+          },
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "12.2.1",
+        "targets": [
+          {
+            "alias": "",
+            "datasource": {
+              "type": "hadesarchitect-cassandra-datasource",
+              "uid": "PE3297E400DFF12FE"
+            },
+            "datasourceId": 1,
+            "hide": false,
+            "queryType": "query",
+            "rawQuery": true,
+            "refId": "A",
+            "target": "SELECT city, temperature_c as Temperature, wind_speed_ms as  WindSpeed, timestamp\nFROM weather.readings\nwhere city='London'\nOrder by timestamp desc\nlimit 1\nALLOW FILTERING;"
+          }
+        ],
+        "title": "London Temperature",
+        "type": "gauge"
+      }
+    ],
+    "preload": false,
+    "refresh": "5s",
+    "schemaVersion": 42,
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "🌤️ Weather Live Dashboard",
+    "uid": "weather-dashboard",
+    "version": 1
+  }

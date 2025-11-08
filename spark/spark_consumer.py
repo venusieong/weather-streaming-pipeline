@@ -64,5 +64,8 @@ cassandra_query = (
         .start()
 )
 
+
+
+
 # 6. Keep both running
 spark.streams.awaitAnyTermination()

@@ -1,0 +1,17 @@
+apiVersion: 1
+datasources:
+  - name: Cassandra
+    type: hadesarchitect-cassandra-datasource
+    access: proxy
+    url: cassandra:9042
+    isDefault: true
+    jsonData:
+      consistency: QUORUM
+      keyspace: weather
+      timeout: 10
+      protocolVersion: 4
+
+#type: hadesarchitect-cassandra-datasource → uses the Cassandra plugin
+#url: cassandra:9042 → connects to your Cassandra container via Docker internal network
+#keyspace: weather → points to the keyspace where your readings table lives
+#isDefault: true → Grafana treats this as the default data source

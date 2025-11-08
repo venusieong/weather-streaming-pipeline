@@ -1,0 +1,16 @@
+apiVersion: 1
+providers:
+  - name: 'Weather Dashboard Provider'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 5
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+
+#providers — Tells Grafana to look for dashboard JSON files.
+#path — /var/lib/grafana/dashboards (we’ll map this to ./grafana/dashboards later).
+#updateIntervalSeconds: 5 — Grafana checks every 5 seconds for changes.
+#allowUiUpdates: true — Lets you edit and save dashboards from the Grafana UI.

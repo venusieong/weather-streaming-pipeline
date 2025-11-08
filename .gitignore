@@ -6,3 +6,5 @@ cassandra/data/
 minio/data/
 
 spark/jars/*.jar
+
+grafana/data/
