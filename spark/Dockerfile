@@ -7,8 +7,14 @@ USER root
 # Ensure Ivy cache is writable (for --packages)
 RUN mkdir -p /home/spark/.ivy2/cache && chmod -R 777 /home/spark/.ivy2
 
+RUN pip install requests
+
 # Copy the consumer script
 COPY spark_consumer.py /app/spark_consumer.py
+COPY spark_historical_bf.py /app/spark_historical_bf.py
+COPY weather_bronze_to_silver.py /app/weather_bronze_to_silver.py
+COPY weather_silver_to_gold.py /app/weather_silver_to_gold.py
+
 
 # Copy all required JARs into Spark classpath
 COPY jars/*.jar /opt/spark/jars/

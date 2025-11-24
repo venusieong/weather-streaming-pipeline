@@ -100,6 +100,118 @@ services:
       - cassandra
     restart: always
 
+
+  spark-thrift:
+    image: weather-streaming-pipeline-spark-consumer
+    container_name: spark-thrift
+    depends_on:
+      - minio
+    ports:
+      - "10000:10000"   # Spark Thrift JDBC port
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        export SPARK_NO_DAEMONIZE=true
+        /opt/spark/sbin/start-thriftserver.sh \
+          --master local[*] \
+          --hiveconf hive.server2.thrift.port=10000 \
+          --jars /opt/spark/jars/delta-spark_2.12-3.2.0.jar,/opt/spark/jars/delta-storage-3.2.0.jar,/opt/spark/jars/hadoop-aws-3.3.4.jar,/opt/spark/jars/aws-java-sdk-bundle-1.12.772.jar \
+          --conf spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension \
+          --conf spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog \
+          --conf spark.hadoop.fs.s3a.endpoint=http://minio:9000 \
+          --conf spark.hadoop.fs.s3a.access.key=minioadmin \
+          --conf spark.hadoop.fs.s3a.secret.key=minioadmin \
+          --conf spark.hadoop.fs.s3a.path.style.access=true \
+          --conf spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
+
+
+
+  spark-notebook:
+    image: weather-streaming-pipeline-spark-consumer
+    container_name: spark-notebook
+    ports:
+      - "8889:8888"
+    entrypoint: bash
+    command: >
+      -c "pip install jupyter &&
+          export SPARK_HOME=/opt/spark &&
+          export PYTHONPATH=$$SPARK_HOME/python:$$SPARK_HOME/python/lib/py4j-0.10.9.7-src.zip &&
+          jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root"
+
+
+  spark-backfill:
+    image: weather-streaming-pipeline-spark-consumer
+    container_name: spark-backfill
+    depends_on:
+      - minio
+    # ⬆️ kafka / cassandra are NOT required for backfill
+
+    # Override the ENTRYPOINT so we don't wait for Cassandra
+    entrypoint: [
+      "/opt/spark/bin/spark-submit",
+      "--jars",
+      "/opt/spark/jars/delta-spark_2.12-3.2.0.jar,/opt/spark/jars/delta-storage-3.2.0.jar,/opt/spark/jars/hadoop-aws-3.3.4.jar,/opt/spark/jars/aws-java-sdk-bundle-1.12.772.jar",
+      "--conf", "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension",
+      "--conf", "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+      "--conf", "spark.hadoop.fs.s3a.endpoint=http://minio:9000",
+      "--conf", "spark.hadoop.fs.s3a.access.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.secret.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.path.style.access=true",
+      "--conf", "spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem",
+      "/app/spark_historical_bf.py" 
+    ]
+
+  bronze_to_silver:
+    build: ./spark
+    container_name: spark-bronze-silver
+    command: >
+      /opt/spark/bin/spark-submit
+      --jars /opt/spark/jars/*
+      --packages io.delta:delta-core_2.12:2.4.0
+      /app/weather_bronze_to_silver.py
+    depends_on:
+      - minio
+    entrypoint: [
+      "/opt/spark/bin/spark-submit",
+      "--jars",
+      "/opt/spark/jars/delta-spark_2.12-3.2.0.jar,/opt/spark/jars/delta-storage-3.2.0.jar,/opt/spark/jars/hadoop-aws-3.3.4.jar,/opt/spark/jars/aws-java-sdk-bundle-1.12.772.jar",
+      "--conf", "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension",
+      "--conf", "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+      "--conf", "spark.hadoop.fs.s3a.endpoint=http://minio:9000",
+      "--conf", "spark.hadoop.fs.s3a.access.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.secret.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.path.style.access=true",
+      "--conf", "spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem",
+      "/app/weather_bronze_to_silver.py"
+    ]
+
+  silver_to_gold:
+    build: ./spark
+    container_name: spark-silver-gold
+    command: >
+      /opt/spark/bin/spark-submit
+      --jars /opt/spark/jars/*
+      --packages io.delta:delta-core_2.12:2.4.0
+      /app/weather_silver_to_gold.py
+    depends_on:
+      - minio
+      - bronze_to_silver
+    entrypoint: [
+      "/opt/spark/bin/spark-submit",
+      "--jars",
+      "/opt/spark/jars/delta-spark_2.12-3.2.0.jar,/opt/spark/jars/delta-storage-3.2.0.jar,/opt/spark/jars/hadoop-aws-3.3.4.jar,/opt/spark/jars/aws-java-sdk-bundle-1.12.772.jar",
+      "--conf", "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension",
+      "--conf", "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog",
+      "--conf", "spark.hadoop.fs.s3a.endpoint=http://minio:9000",
+      "--conf", "spark.hadoop.fs.s3a.access.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.secret.key=minioadmin",
+      "--conf", "spark.hadoop.fs.s3a.path.style.access=true",
+      "--conf", "spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem",
+      "/app/weather_silver_to_gold.py"
+    ]
+
+
 volumes:
   cassandra_data: 
 
