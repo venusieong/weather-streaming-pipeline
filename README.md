@@ -17,7 +17,7 @@ The goal is to show real Data Engineering skills across:
 This pipeline can be extended later with Kubernetes, Airflow orchestration, and Prometheus alerting.
 
 ### Pipeline Architecture:
-<img src="Weather_Streaming_Pipeline.drawio.png"/>
+<img src="image/Weather_Streaming_Pipeline.drawio.png"/>
 
 ### ✨ Features
 ✔ Real-time ingestion
@@ -76,7 +76,7 @@ SELECT * FROM weather.readings;
 
 The dashboard shows:
 - Temperature gauge
-<img src="Grafana_dashboard.png" width="380"/>
+<img src="image/Grafana_dashboard.png" width="380"/>
 
 
 ### 🔧 Spark Jobs Included
@@ -88,11 +88,11 @@ spark_historical_bf.py: Backfill job for historical reprocessing.
 ### Visualization
 Below are some historical analysis visualization that generated in Jupyter notebook reading data from Lakehouse.
 
-<img src="Temperature_trend.png" width="450"/>
+<img src="image/Temperature_trend.png" width="450"/>
 
-<img src="Max_wind_speed.png" width="450"/>
+<img src="image/Max_wind_speed.png" width="450"/>
 
-<img src="Hottest_date.png" width="450"/>
+<img src="image/Hottest_date.png" width="450"/>
 
 
 ### 🔮 Future Enhancements 
@@ -106,6 +106,7 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
 
 
