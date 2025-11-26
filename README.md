@@ -80,10 +80,10 @@ The dashboard shows:
 
 
 ### 🔧 Spark Jobs Included
-spark_consumer.py: Real-time stream processing from Kafka → MinIO (Delta Bronze) & Cassandra.
-weather_bronze_to_silver.py: Batch transformation notebook → clean & flatten Bronze → Silver.
-weather_silver_to_gold.py: Aggregations → Gold business tables.
-spark_historical_bf.py: Backfill job for historical reprocessing.
+1. spark_consumer.py: Real-time stream processing from Kafka → MinIO (Delta Bronze) & Cassandra.
+2. weather_bronze_to_silver.py: Batch transformation notebook → clean & flatten Bronze → Silver.
+3. weather_silver_to_gold.py: Aggregations → Gold business tables.
+4. spark_historical_bf.py: Backfill job for historical reprocessing.
 
 ### Visualization
 Below are some historical analysis visualization that generated in Jupyter notebook reading data from Lakehouse.
@@ -106,6 +106,7 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
 
 
