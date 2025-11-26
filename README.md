@@ -76,7 +76,7 @@ SELECT * FROM weather.readings;
 
 The dashboard shows:
 - Temperature gauge
-<img src="Grafana_dashboard.png" width="450"/>
+<img src="Grafana_dashboard.png" width="380"/>
 
 
 ### 🔧 Spark Jobs Included
@@ -86,7 +86,13 @@ weather_silver_to_gold.py: Aggregations → Gold business tables.
 spark_historical_bf.py: Backfill job for historical reprocessing.
 
 ### Visualization
+Below are some historical analysis visualization that generated in Jupyter notebook reading data from Lakehouse.
 
+<img src="Temperature_trend.png" width="450"/>
+
+<img src="Max_wind_speed.png" width="450"/>
+
+<img src="Hottest_date.png" width="450"/>
 
 
 ### 🔮 Future Enhancements 
@@ -100,6 +106,7 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
 
 
