@@ -76,27 +76,20 @@ SELECT * FROM weather.readings;
 
 The dashboard shows:
 - Temperature gauge
-- Wind speed gauge
+<img src="Grafana_dashboard.png"/>
 
 
 ### 🔧 Spark Jobs Included
-spark_consumer.py
-- Real-time stream processing from Kafka → MinIO (Delta Bronze) & Cassandra.
-
-weather_bronze_to_silver.py
-- Batch transformation notebook → clean & flatten Bronze → Silver.
-
-weather_silver_to_gold.py
-- Aggregations → Gold business tables.
-
-spark_historical_bf.py
-- Backfill job for historical reprocessing.
+spark_consumer.py: Real-time stream processing from Kafka → MinIO (Delta Bronze) & Cassandra.
+weather_bronze_to_silver.py: Batch transformation notebook → clean & flatten Bronze → Silver.
+weather_silver_to_gold.py: Aggregations → Gold business tables.
+spark_historical_bf.py: Backfill job for historical reprocessing.
 
 ### Visualization
 
 
 
-###🔮 Future Enhancements 
+### 🔮 Future Enhancements 
 
 Here are the things that can be added to the pipeline to enhance performance:
 1. Kubernetes Deployment (K8s)
@@ -107,4 +100,5 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
