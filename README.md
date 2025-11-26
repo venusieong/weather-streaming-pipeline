@@ -76,7 +76,7 @@ SELECT * FROM weather.readings;
 
 The dashboard shows:
 - Temperature gauge
-<img src="Grafana_dashboard.png"/>
+<img src="Grafana_dashboard.png" width="450"/>
 
 
 ### 🔧 Spark Jobs Included
@@ -100,5 +100,6 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
 
