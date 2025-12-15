@@ -17,7 +17,7 @@ The goal is to show real Data Engineering skills across:
 This pipeline can be extended later with Kubernetes, Airflow orchestration, and Prometheus alerting.
 
 ### Pipeline Architecture:
-<img src="image/Weather_Streaming_Pipeline.drawio.png"/>
+<img src="image/Weather_Streaming_Pipeline.drawio (1).png"/>
 
 ### ✨ Features
 ✔ Real-time ingestion
@@ -106,6 +106,7 @@ Here are the things that can be added to the pipeline to enhance performance:
 
 3. Schema Registry + Avro
 Allows strongly typed Kafka payloads.
+
 
 
 
